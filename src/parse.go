@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func readLines() []string {
+func readLines() ([]string, error) {
 
 	f, err := os.Open(os.Args[1])
 	if err != nil {
@@ -21,7 +21,7 @@ func readLines() []string {
 	reader := bufio.NewReader(f)
 
 	if _, _, err := reader.ReadLine(); err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	var lines []string
@@ -32,12 +32,12 @@ func readLines() []string {
 			if err.Error() == "EOF" {
 				break
 			}
-			log.Fatal(err)
+			return nil, err
 		}
 		lines = append(lines, string(line))
 	}
 
-	return lines
+	return lines, nil
 }
 
 func parseCoordinates(s string) (float64, float64) {
