@@ -42,10 +42,9 @@ func eachDriver(loads []Load, delivered []bool) Driver {
 			driver.route = append(driver.route, cur)
 		}
 
-		// lastIdx is the last point delivered
+		// make the delivery
 		driver.totalDist += loads[cur].deliveryTime
 		delivered[cur] = true
-		// fmt.Printf("Driver totalDist: %f\n", driver.totalDist)
 
 		minDist := math.Inf(1)
 		nextDeliveryIdx := -1
@@ -70,14 +69,14 @@ func eachDriver(loads []Load, delivered []bool) Driver {
 		if cur == 0 && nextDeliveryIdx == -1 {
 			for i, val := range delivered {
 				if !val {
-					log.Fatal("Can't make this delivery", i)
+					log.Fatal("Impossible delivery", i)
 				}
 			}
 		}
 
 		// if we found a point to deliver to, add it to the queue
 		if nextDeliveryIdx != -1 {
-			// 1. Go to pickup
+			// Go to next pickup spot
 			driver.totalDist += loads[cur].distBetween[nextDeliveryIdx]
 			// add next point on itinerary
 			q.Enqueue(nextDeliveryIdx)
@@ -85,7 +84,7 @@ func eachDriver(loads []Load, delivered []bool) Driver {
 		}
 
 		if q.IsEmpty() {
-			// means we are returning to origin
+			// We are done! return to origin
 			driver.totalDist += loads[cur].distBetween[0]
 		}
 	}
