@@ -26,7 +26,7 @@ Right now it is a rather naive solution in which each driver goes to the Nearest
 
 - **Nearest Neighbour**: The current solution uses a nearest neighbour algorithm to determine the next delivery to make. This is a rather naive approach and can be improved upon. A better approach would be to use a more advanced algorithm like the Branch and Bound algorithm.
 
-- **Driver assignment**: The current solution assigns drivers to deliveries in a rather naive way. It assigns the driver to the closest delivery. A better approach would be to assign drivers to deliveries in a way that minimizes the total time taken to deliver all the packages.
+- **Driver assignment**: The current solution assigns drivers to deliveries in a rather naive way. It assigns the driver to the closest delivery. A better approach would be to assign simultaneously to geographically opposing deliveries. This might make a difference in a Multithreading scenario.
 
 ### Code improvements
 
