@@ -4,19 +4,11 @@ import (
 	"math"
 )
 
-func quickDistance(x1, y1, x2, y2 float64) float64 {
-	return ((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1))
-}
-
-func calcDisToOrigin(x, y float64) float64 {
-	return calculateDistance(0, 0, x, y)
-}
-
 // calculateDistance calculates the distance between two points
 // this is the naive way of calculating the distance between two points
 // we may be able to get some performance improvements by not squaring the values...?
 func calculateDistance(x1, y1, x2, y2 float64) float64 {
-	return math.Sqrt((x2-x1)*(x2-x1)) + math.Sqrt((y2-y1)*(y2-y1))
+	return math.Sqrt(((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1)))
 }
 
 func calcAllDistances(loads []Load) []Load {

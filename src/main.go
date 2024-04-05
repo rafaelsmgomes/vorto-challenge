@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"math"
 	"os"
+	"strings"
 )
 
 type Load struct {
@@ -54,11 +56,10 @@ func oneDriver(loads []Load, delivered []bool) Driver {
 		minDist := math.Inf(1)
 		nextDeliveryIdx := -1
 		for i, dist := range loads[cur].distBetween {
-			// if cargo has already been delivered, skip it
+			// Condition 0) if cargo has already been delivered, skip it
 			if delivered[i] {
 				continue
 			}
-
 			// Condition 1) Is this a valid delivery?
 			// We need to check if the driver can make the delivery and come back to the origin
 			totalDistAfterDelivery := driver.totalDist + dist + loads[i].distBetween[0] + loads[i].deliveryTime
@@ -70,6 +71,13 @@ func oneDriver(loads []Load, delivered []bool) Driver {
 			if dist < minDist {
 				minDist = dist
 				nextDeliveryIdx = i
+			}
+		}
+		if cur == 0 && nextDeliveryIdx == -1 {
+			for i, val := range delivered {
+				if !val {
+					log.Fatal("Can't make this delivery", i)
+				}
 			}
 		}
 
@@ -105,18 +113,16 @@ func main() {
 	loads = calcAllDistances(loads)
 
 	delivered := make([]bool, len(loads))
-	fmt.Println(delivered)
 
-	driver := oneDriver(loads, delivered)
-	fmt.Println(driver)
 	for {
 		if allTrue(delivered) {
 			break
 		}
 
 		driver := oneDriver(loads, delivered)
-		fmt.Println(driver.route)
-		fmt.Println(delivered)
+		str := fmt.Sprint(driver.route)
+		str = strings.ReplaceAll(str, " ", ",")
+		fmt.Println(str)
 	}
 
 }
