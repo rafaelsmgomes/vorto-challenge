@@ -20,7 +20,7 @@ python3 evaluatShared.py --cmd "./vrp" --problemDir training
 
 This solution can definitely be improved upon.
 
-Right now it is a rather naive solution in which each driver goes to the Nearest Neighbour/Deliver, makes it and judges from there wether to go do another delivery or to go back to origin (respective the 12 hours constraint).
+Right now it is a rather naive solution in which each driver goes to the Nearest Neighbour/Deliver, makes it and judges from there wether to go do another delivery or to go back to origin (respecting the 12 hours constraint).
 
 ### Algorithm improvements
 
