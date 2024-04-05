@@ -20,18 +20,12 @@ type Load struct {
 }
 
 type Driver struct {
-	ID        int
 	totalDist float64
 	route     []int
 }
 
-// what do we need? We need to build an array of points that we're gonna go to
-// forget about the restrictions for a while (no more than 12 hours driving)
-// So, for each point we go to, we need to to remove it from the list of available points
-// then we do the load and after we go to the next point
-
-func oneDriver(loads []Load, delivered []bool) Driver {
-	driver := Driver{ID: 1, totalDist: 0, route: []int{}}
+func eachDriver(loads []Load, delivered []bool) Driver {
+	driver := Driver{totalDist: 0, route: []int{}}
 	upperBound := 720.0
 
 	// I need to start at point 0 and move into each next nearest point in the list
@@ -85,14 +79,13 @@ func oneDriver(loads []Load, delivered []bool) Driver {
 		if nextDeliveryIdx != -1 {
 			// 1. Go to pickup
 			driver.totalDist += loads[cur].distBetween[nextDeliveryIdx]
-			// fmt.Printf("Go to pickup: Driver totalDist: %f\n", driver.totalDist)
-
+			// add next point on itinerary
 			q.Enqueue(nextDeliveryIdx)
 
 		}
 
 		if q.IsEmpty() {
-			// fmt.Printf("Drive back to origin: %.2f\n", loads[cur].distBetween[0])
+			// means we are returning to origin
 			driver.totalDist += loads[cur].distBetween[0]
 		}
 	}
@@ -100,15 +93,17 @@ func oneDriver(loads []Load, delivered []bool) Driver {
 	return driver
 }
 
-// let's calculate the smallest time for a single driver to do all of this
-
 func main() {
 	if len(os.Args) < 1 {
 		fmt.Println("This program requires a file path as an argument")
 		os.Exit(1)
 	}
 
-	lines := readLines()
+	lines, err := readLines()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	loads := parseLoads(lines)
 	loads = calcAllDistances(loads)
 
@@ -119,7 +114,7 @@ func main() {
 			break
 		}
 
-		driver := oneDriver(loads, delivered)
+		driver := eachDriver(loads, delivered)
 		str := fmt.Sprint(driver.route)
 		str = strings.ReplaceAll(str, " ", ",")
 		fmt.Println(str)
